@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+  project-home-generator-ui:
+    image: project-home-generator-ui
+    ports:
+      - "20000:80"
+    networks:
+      - projecthomenet
+  
+  project-home-generator:
+    image: project-home-generator
+    networks:
+      - projecthomenet
+    environment:
+      - spring.datasource.url=jdbc:postgresql://db:5432/projecthome
+      - spring.datasource.username:projecthome
+      - spring.datasource.password:projecthome
+      - spring.datasource.driver-class-name:org.postgresql.Driver
+
+  db:
+    image: postgres
+    networks:
+      - projecthomenet
+    environment:
+      - POSTGRES_USER=projecthome
+      - POSTGRES_PASSWORD=projecthome
+    volumes:
+      - postgresql:/var/lib/postgresql
+      # This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
+      - postgresql_data:/var/lib/postgresql/data
+
+networks:
+  projecthomenet:
+    driver: bridge
+
+volumes:
+  postgresql:
+  postgresql_data:
