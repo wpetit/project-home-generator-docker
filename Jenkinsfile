@@ -5,7 +5,7 @@ node {
 	}
 	
 	stage('Deploy') {
-		sh 'sudo docker-compose up'
+		sh 'sudo docker-compose -d up'
 	}
 }
 
